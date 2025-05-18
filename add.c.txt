@@ -1,0 +1,21 @@
+Dim customerID As Integer = Convert.ToInt32(ComboBox1.SelectedValue)
+        Dim productID As Integer = Convert.ToInt32(ComboBox2.SelectedValue)
+        Dim quantity As Integer = Convert.ToInt32(TextBox1.Text.Trim())
+        Dim totalAmount As Decimal = Convert.ToDecimal(TextBox2.Text.Trim())
+        Dim paymentMode As String = ComboBox3.SelectedItem.ToString()
+
+        Using connection As New SqlConnection(connectionString)
+            Dim query As String = "INSERT INTO Sales (CustomerID, ProductID, Quantity, TotalAmount, PaymentMode) VALUES (@CustomerID, @ProductID, @Quantity, @TotalAmount, @PaymentMode)"
+            Dim command As New SqlCommand(query, connection)
+            command.Parameters.AddWithValue("@CustomerID", customerID)
+            command.Parameters.AddWithValue("@ProductID", productID)
+            command.Parameters.AddWithValue("@Quantity", quantity)
+            command.Parameters.AddWithValue("@TotalAmount", totalAmount)
+            command.Parameters.AddWithValue("@PaymentMode", paymentMode)
+
+            connection.Open()
+            command.ExecuteNonQuery()
+        End Using
+
+        MessageBox.Show("Sale added successfully.")
+        LoadSalesData() ' Refresh the DataGridView
